@@ -6,6 +6,7 @@ const Listing = require("./models/listing.js")
 const methodOverride = require("method-override")
 const path = require("path")
 const ejsMate = require("ejs-mate")
+const ExpressError = require("./ExpressError.js")
 async function main() {
     await mongoose.connect(mongoUrl)
 }
@@ -25,22 +26,30 @@ app.use(express.static(path.join(__dirname, "/public")))
 app.get("/", (req, res) => {
     res.send("I am root!")
 })
-//middleware test\
+//middleware test---------------------------------------------
 let checkToken = (req, res, next) => {
     let { token } = req.query
     if (token === "accessdedo") {
         next()
     }
-    else res.send("access denied token do pehle")
+    throw new ExpressError(401, "Access Denied!")
 }
-// app.use("/listings", checkToken, (req,res,next)=>{
-    // console.log("I am a middleware")
-//     req.time = new Date(Date.now())
-//     console.log(req.time)
-//     // console.log(req)
-// })
+//err 
+app.get("/err", (req, res) => {
+    abc = abc;
+})
+app.use((err, req, res, next) => {
+    let { status = 404, message = "some error occured" } = err
+    res.status(status).send(message)
+})
+app.get("/admin", (req, res) => {
+    throw new ExpressError(404, "nigga not found")
+})
+
+//--------------------------------------------------------------
+
 // All Listings
-app.get("/listings", checkToken, async (req, res) => {
+app.get("/listings", async (req, res) => {
     const allListings = await Listing.find({})
     res.render("listings/index.ejs", { allListings })
 })
