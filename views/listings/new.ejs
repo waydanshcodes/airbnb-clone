@@ -3,36 +3,46 @@
     <body>
         <br><br>
         <div class="row">
-            <div class="col-8 offset-2">  
+            <div class="col-8 offset-2">
                 <h3>Add a new Listing</h3><br>
-                <form action="/listings" method="post">
+                <form action="/listings" method="post" class="needs-validation" novalidate>
                     <div>
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" name="listing[title]" placeholder="enter title"><br>
+                        <input type="text" class="form-control" name="listing[title]" placeholder="enter title"
+                            required>
+                        <div class="invalid-feedback">Invalid Title</div><br>
                     </div>
                     <div>
                         <label for="description" class="form-label">Description</label>
                         <textarea name="listing[description]" class="form-control" cols="20" rows="2"
-                            placeholder="enter description"></textarea><br>
+                            placeholder="enter description" required></textarea>
+                        <div class="invalid-feedback">Invalid Description</div><br>
                     </div>
                     <div>
                         <label for="image" class="form-label">Image URL</label>
-                        <input type="text" class="form-control" name="listing[image]" placeholder="enter image URL"><br>
+                        <input type="text" class="form-control" name="listing[image]" placeholder="enter image URL"
+                            required>
+                        <div class="invalid-feedback">Invalid URL</div><br>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" class="form-control" name="listing[price]" placeholder="enter price"><br>
+                            <input type="number" class="form-control" name="listing[price]" placeholder="enter price"
+                                required>
+                            <div class="invalid-feedback">Invalid Price</div><br>
                         </div>
                         <div class="col-md-8">
                             <label for="location" class="form-label">Location</label>
                             <input type="text" class="form-control" name="listing[location]"
-                                placeholder="enter location"><br>
+                                placeholder="enter location" required>
+                            <div class="invalid-feedback">Invalid Location</div><br>
                         </div>
                     </div>
                     <div>
                         <label for="country" class="form-label">Country</label>
-                        <input type="text" class="form-control" name="listing[country]" placeholder="enter country"><br>
+                        <input type="text" class="form-control" name="listing[country]" placeholder="enter country"
+                            required>
+                        <div class="invalid-feedback">Invalid Country</div><br>
                     </div>
                     <button class="btn btn-dark">OK</button><br><br>
                 </form>
