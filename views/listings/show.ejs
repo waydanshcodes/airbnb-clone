@@ -3,12 +3,13 @@
     <body> <br><br>
         <div class="row">
             <div class="col-6 offset-4">
-                <h3>Listing Details:</h3> <br>
+                <h3>
+                    <%=listing.title%>
+                </h3>
                 <div class="card show-card" style="width: 25rem;">
                     <img src="<%=listing.image%>" class="card-img-top" style="height: 20rem;" alt="...">
                     <div class="card-body">
                         <p class="card-text">
-                            <b><%=listing.title%></b><br>
                             <%=listing.description%><br>
                             ₹<%=listing.price.toLocaleString("en-IN")%> /night<br>
                             <%=listing.location%><br>
@@ -23,5 +24,5 @@
             <form action="/listings/<%=listing._id%>/?_method=DELETE" method="POST">
                 <button class="btn btn-dark offset-4 del-btn">Delete</button>
             </form>
-        </div> <br><br>
+        </div><br><br>
     </body>

@@ -9,6 +9,7 @@ const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError.js")
 const wrapAsync = require("./utils/wrapAsync.js")
 const listingSchema = require("./schema.js")
+const Review = require("./models/review.js")
 
 async function main() {
     await mongoose.connect(mongoUrl)
