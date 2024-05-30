@@ -10,5 +10,12 @@ const listingSchema = Joi.object({
         image: Joi.string().allow("", null),
     }).required()
 })
-
 module.exports = listingSchema
+
+const reveiewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number().required().min(1).max(5),
+        comment: Joi.string().required()
+    }).required()
+})
+module.exports = reveiewSchema
