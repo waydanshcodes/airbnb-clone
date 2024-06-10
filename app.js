@@ -45,9 +45,10 @@ let checkToken = (req, res, next) => {
 //Validate Listing function
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body)
+    console.log(error)
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",")
-        throw new ExpressError(400, errMsg)
+        throw new ExpressError(400, error)
     }
     next()
 }
@@ -94,7 +95,7 @@ app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params
     let editedListing = req.body.listing
     // console.log(id)
-    // console.log(editedListing)
+    console.log(editedListing)
     await Listing.findByIdAndUpdate(id, editedListing)
     res.redirect(`/listings/${id}`)
 }))
@@ -133,6 +134,7 @@ app.all("*", (req, res, next) => {
 
 //error handler
 app.use((err, req, res, next) => {
+    console.log(err)
     let { status = 500, message = "something went wrong :/" } = err
     res.status(status).render("error.ejs", { message })
 })
