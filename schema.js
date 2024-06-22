@@ -14,7 +14,7 @@ module.exports = listingSchema
 
 const reveiewSchema = Joi.object({
     review: Joi.object({
-        rating: Joi.number().required().min(1).max(5),
+        rating: Joi.number().min(1).max(5).required(),
         comment: Joi.string().required()
     }).required()
 })
