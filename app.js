@@ -8,6 +8,7 @@ const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError.js")
 const listings = require("./routes/listing.js")
 const reviews = require("./routes/review.js")
+const cookieParser = require("cookie-parser")
 
 
 async function main() {
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"))
 app.engine("ejs", ejsMate)
 app.use(express.static(path.join(__dirname, "/public")))
+app.use(cookieParser("secretcode"))
 
 app.get("/", (req, res) => {
     res.send("I am root!")
@@ -44,9 +46,17 @@ app.use("/listings", listings)
 app.use("/listings/:id/reviews", reviews)
 
 
+app.get("/getcookies", (req, res) => {
+    res.cookie("vansh", "gupta")
+    res.cookie("vedansh", "gupta", { signed: true })
+    res.send("cookie :)")
+})
 
-
-
+app.get("/printcookies", (req, res) => {
+    let { name = "Anonymous" } = req.cookies
+    console.dir()
+    res.send(`Hello ${name} `)
+})
 
 //page not found 
 app.all("*", (req, res, next) => {
