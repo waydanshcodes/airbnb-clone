@@ -28,9 +28,10 @@ router.get("", wrapAsync(async (req, res) => {
 router.get("/new", (req, res) => {
     res.render("listings/new.ejs")
 })
-router.post("",  wrapAsync(async (req, res, next) => {
+router.post("", wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing)
     await newListing.save()
+    req.flash("success", "New Listing added!")
     res.redirect("/listings")
 }))
 
@@ -38,6 +39,10 @@ router.post("",  wrapAsync(async (req, res, next) => {
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params
     let listing = await Listing.findById(id).populate("reviews")
+    if (!listing) {
+        req.flash("error", "Requested URL does not exist")
+        res.redirect("/listings")
+    }
     res.render("listings/show.ejs", { listing })
 }))
 
@@ -45,14 +50,19 @@ router.get("/:id", wrapAsync(async (req, res) => {
 router.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params
     let listing = await Listing.findById(id)
+    if (!listing) {
+        req.flash("error", "Requested URL does not exist")
+        res.redirect("/listings")
+    }
     res.render("listings/edit.ejs", { listing })
 }))
-router.put("/:id",  wrapAsync(async (req, res) => {
+router.put("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params
     let editedListing = req.body.listing
     // console.log(id)
     console.log(editedListing)
     await Listing.findByIdAndUpdate(id, editedListing)
+    req.flash("success", "Listing updated!")
     res.redirect(`/listings/${id}`)
 }))
 
@@ -61,6 +71,7 @@ router.delete("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params
     let deletedListing = await Listing.findByIdAndDelete(id)
     console.log(deletedListing)
+    req.flash("success", "Listing deletd!")
     res.redirect("/listings")
 }))
 

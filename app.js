@@ -6,9 +6,16 @@ const methodOverride = require("method-override")
 const path = require("path")
 const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError.js")
-const listings = require("./routes/listing.js")
-const reviews = require("./routes/review.js")
+const listingRouter = require("./routes/listing.js")
+const reviewRouter = require("./routes/review.js")
+const userRouter = require("./routes/user.js")
 const cookieParser = require("cookie-parser")
+const session = require("express-session")
+const flash = require("connect-flash")
+const passport = require("passport")
+const LocalStrategy = require("passport-local")
+const User = require("./models/user.js")
+const bodyParser = require("body-parser")
 
 
 async function main() {
@@ -19,6 +26,7 @@ main().then(() => {
 }).catch((err) => {
     console.log(err)
 })
+
 
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
@@ -32,6 +40,38 @@ app.get("/", (req, res) => {
     res.send("I am root!")
 })
 
+
+app.use(session({
+    secret: "BKL",
+    resave: false,
+    saveUninitialized: true
+}))
+app.use(flash())
+
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success")
+    res.locals.error = req.flash("error")
+    next()
+})
+
+app.get("/demoUser", async (req, res) => {
+    let fakeUser = new User({
+        email: "vedansh@gmail.com",
+        username: "vedansh101"
+    })
+    let registeredUser = await User.register(fakeUser, "password@101")
+    res.send(registeredUser)
+})
+
+
+
 //middleware test = Access Token --------------------------------------------
 let checkToken = (req, res, next) => {
     let { token } = req.query
@@ -42,8 +82,9 @@ let checkToken = (req, res, next) => {
 }
 //-----------------------------------------------------------------------------
 
-app.use("/listings", listings)
-app.use("/listings/:id/reviews", reviews)
+app.use("/listings", listingRouter)
+app.use("/listings/:id/reviews", reviewRouter)
+app.use("/", userRouter)
 
 
 app.get("/getcookies", (req, res) => {
