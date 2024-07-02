@@ -15,7 +15,6 @@ const flash = require("connect-flash")
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
 const User = require("./models/user.js")
-const bodyParser = require("body-parser")
 
 
 async function main() {
@@ -51,7 +50,6 @@ app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
-
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
