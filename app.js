@@ -34,68 +34,42 @@ app.use(methodOverride("_method"))
 app.engine("ejs", ejsMate)
 app.use(express.static(path.join(__dirname, "/public")))
 app.use(cookieParser("secretcode"))
-
 app.get("/", (req, res) => {
     res.send("I am root!")
 })
-
-
 app.use(session({
     secret: "BKL",
     resave: false,
     saveUninitialized: true
 }))
 app.use(flash())
-
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
-
 app.use((req, res, next) => {
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
+    res.locals.currentUser = req.user
     next()
 })
-
-app.get("/demoUser", async (req, res) => {
-    let fakeUser = new User({
-        email: "vedansh@gmail.com",
-        username: "vedansh101"
-    })
-    let registeredUser = await User.register(fakeUser, "password@101")
-    res.send(registeredUser)
-})
-
-
-
-//middleware test = Access Token --------------------------------------------
-let checkToken = (req, res, next) => {
-    let { token } = req.query
-    if (token === "accessdedo") {
-        next()
-    }
-    throw new ExpressError(401, "Access Denied!")
-}
-//-----------------------------------------------------------------------------
-
 app.use("/listings", listingRouter)
 app.use("/listings/:id/reviews", reviewRouter)
 app.use("/", userRouter)
 
 
-app.get("/getcookies", (req, res) => {
-    res.cookie("vansh", "gupta")
-    res.cookie("vedansh", "gupta", { signed: true })
-    res.send("cookie :)")
-})
+// app.get("/getcookies", (req, res) => {
+//     res.cookie("vansh", "gupta")
+//     res.cookie("vedansh", "gupta", { signed: true })
+//     res.send("cookie :)")
+// })
 
-app.get("/printcookies", (req, res) => {
-    let { name = "Anonymous" } = req.cookies
-    console.dir()
-    res.send(`Hello ${name} `)
-})
+// app.get("/printcookies", (req, res) => {
+//     let { name = "Anonymous" } = req.cookies
+//     console.dir()
+//     res.send(`Hello ${name} `)
+// })
 
 //page not found 
 app.all("*", (req, res, next) => {

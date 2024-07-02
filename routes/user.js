@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require("../models/user")
 const wrapAsync = require("../utils/wrapAsync")
 const passport = require("passport")
+const {savedRedirectUrl} = require("../middlewares.js")
 
 router.get("/signup", (req, res) => {
     res.render("./users/signup.ejs")
@@ -14,8 +15,13 @@ router.post("/signup", wrapAsync(async (req, res) => {
         const newUser = new User({ username, email })
         const registeredUser = await User.register(newUser, password)
         console.log(registeredUser)
-        req.flash("success", `Welcome to GhoomiGhoomi Travels ${username}!`)
-        res.redirect("/listings")
+        req.login(registeredUser, (err) => {
+            if (err) {
+                return next(err)
+            }
+            req.flash("success", `Welcome to GhoomiGhoomi Travels ${username}!`)
+            res.redirect("/listings")
+        })
     }
     catch (err) {
         req.flash("error", err.message)
@@ -27,10 +33,11 @@ router.get("/login", (req, res) => {
     res.render("./users/login.ejs")
 })
 
-router.post("/login", passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), async (req, res) => {
+router.post("/login", savedRedirectUrl, passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), async (req, res) => {
     let { username } = req.body
     req.flash("success", `Welcome back to GhoomiGhoomi Travels ${username}`)
-    res.redirect("/listings")
+    let redirectUrl = res.locals.redirectUrl || "/listings"
+    res.redirect(redirectUrl)
 })
 
 router.get("/logout", (req, res, next) => {
