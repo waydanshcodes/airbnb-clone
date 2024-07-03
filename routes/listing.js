@@ -1,24 +1,10 @@
 const express = require("express")
 const app = express()
 const Listing = require("../models/listing.js")
-const ExpressError = require("../utils/ExpressError.js")
 const wrapAsync = require("../utils/wrapAsync.js")
-const listingSchema = require("../schema.js")
 const router = express.Router()
-const passport = require("passport")
-const { isLoggedIn, isAuthorized } = require("../middlewares.js")
+const { isLoggedIn, isAuthorized, validateListing } = require("../middlewares.js")
 
-
-//Validate Listing function
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body)
-    console.log(error)
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",")
-        throw new ExpressError(400, error)
-    }
-    next()
-}
 
 // All Listings
 router.get("", wrapAsync(async (req, res) => {

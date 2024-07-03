@@ -1,4 +1,7 @@
 const Listing = require("./models/listing")
+const ExpressError = require("./utils/ExpressError")
+const listingSchema= require("./schema.js")
+const reviewSchema = require("./schema.js")
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -23,6 +26,25 @@ module.exports.isAuthorized = async (req, res, next) => {
     if (!listing.owner._id.equals(res.locals.currentUser._id)) {
         req.flash("error", "You are not authorized for this task.")
         return res.redirect(`/listings/${id}`)
+    }
+    next()
+}
+
+module.exports.validateListing = (req, res, next) => {
+    let { error } = listingSchema.validate(req.body)
+    console.log(error)
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",")
+        throw new ExpressError(400, error)
+    }
+    next()
+}
+
+module.exports.validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body)
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",")
+        throw new ExpressError(400, errMsg)
     }
     next()
 }
