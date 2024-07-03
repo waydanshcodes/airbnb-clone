@@ -27,7 +27,7 @@ router.post("", isLoggedIn, wrapAsync(async (req, res, next) => {
 // Show Route 
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params
-    let listing = await Listing.findById(id).populate("reviews").populate("owner")
+    let listing = await Listing.findById(id).populate({ path: "reviews", populate: { path: "author" } }).populate("owner")
     if (!listing) {
         req.flash("error", "Requested URL does not exist")
         res.redirect("/listings")

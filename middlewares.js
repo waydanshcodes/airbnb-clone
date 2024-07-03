@@ -1,4 +1,5 @@
 const Listing = require("./models/listing")
+const Review = require("./models/review")
 const ExpressError = require("./utils/ExpressError")
 const listingSchema= require("./schema.js")
 const reviewSchema = require("./schema.js")
@@ -45,6 +46,16 @@ module.exports.validateReview = (req, res, next) => {
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",")
         throw new ExpressError(400, errMsg)
+    }
+    next()
+}
+
+module.exports.isReviewAuthor = async (req,res,next)=>{
+    let {reviewId, id} = req.params
+    let review = await Review.findById(reviewId)
+    if(!review.author._id.equals(res.locals.currentUser._id)){
+        req.flash("error","You are not authorized for this task")
+        return res.redirect(`/listings/${id}`)
     }
     next()
 }
