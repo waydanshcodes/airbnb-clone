@@ -34,10 +34,21 @@
             <%if(currentUser){%>
             <h4>Leave a Review</h4>
             <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">
-                <div class="mb-3 mt-3">
-                    <label for="rating">Rating</label>
-                    <input class="form-range" type="range" name="review[rating]" min="1" max="5" value="1" id="rating">
-                </div>
+                <fieldset class="starability-slot">
+                    <legend>Your Rating:</legend>
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                  </fieldset>
+                
                 <div class="mb-3 mt-3">
                     <label class="form-label" for="comment">Comment</label>
                     <textarea placeholder="Leave a review" class="form-control" name="review[comment]" id="comment"
@@ -54,9 +65,8 @@
                 <div class="card review-card">
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                            <p>
-                                <%=review.rating%>★ <%=review.comment%>
-                            </p>
+                            <p><%=review.comment%></p>
+                            <p class="starability-result" data-rating="<%=review.rating%>"></p>
                             <footer class="blockquote-footer">A review by @<%=review.author.username%> in <cite title="Source Title">
                                     <%=listing.title%>
                         </blockquote>
