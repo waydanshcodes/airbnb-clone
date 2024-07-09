@@ -5,11 +5,15 @@ const wrapAsync = require("../utils/wrapAsync.js")
 const router = express.Router()
 const { isLoggedIn, isAuthorized, validateListing } = require("../middlewares.js")
 const listingController = require("../controller/listing.js")
+const multer = require("multer")
+const upload = multer({ dest: "uploads/" })
 
 router.route("/")
     .get(wrapAsync(listingController.renderAllListings))
-    .post(isLoggedIn, wrapAsync(listingController.addNewListing))
-
+    // .post(isLoggedIn, wrapAsync(listingController.addNewListing))
+    .post(upload.single("listing[image]"), (req, res) => {
+        res.send(req.file)
+    })
 router.get("/new", isLoggedIn, listingController.renderNewListingForm)
 
 router.route("/:id")
