@@ -37,14 +37,21 @@ module.exports.renderEditListingForm = async (req, res) => {
         req.flash("error", "Requested URL does not exist")
         res.redirect("/listings")
     }
-    res.render("listings/edit.ejs", { listing })
+    let originalImageUrl = listing.image.url
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250")
+    res.render("listings/edit.ejs", { listing, originalImageUrl })
 }
 
 module.exports.editListing = async (req, res) => {
     let { id } = req.params
     let editedListing = req.body.listing
-    console.log(editedListing)
-    await Listing.findByIdAndUpdate(id, editedListing)
+    let newListing = await Listing.findByIdAndUpdate(id, editedListing)
+    if (typeof req.file !== "undefined") {
+        let url = req.file.path
+        let filename = req.file.filename
+        newListing.image = { url, filename }
+        await newListing.save()
+    }
     req.flash("success", "Listing updated!")
     res.redirect(`/listings/${id}`)
 }
