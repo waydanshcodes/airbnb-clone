@@ -60,7 +60,6 @@ app.use("/listings", listingRouter)
 app.use("/listings/:id/reviews", reviewRouter)
 app.use("/", userRouter)
 
-"tomorrow's exam can't help it 😭"
 
 
 // app.get("/getcookies", (req, res) => {
