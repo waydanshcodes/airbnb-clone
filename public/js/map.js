@@ -8,7 +8,8 @@ const map = new mapboxgl.Map({
 console.log(coordinates)
 
 const marker1 = new mapboxgl.Marker()
-        .setLngLat(coordinates)
-        .addTo(map);
+    .setLngLat(coordinates)
+    .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML("<h1>Hello World!</h1>"))
+    .addTo(map);
 
 console.log(map)
