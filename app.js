@@ -36,9 +36,11 @@ app.use(methodOverride("_method"))
 app.engine("ejs", ejsMate)
 app.use(express.static(path.join(__dirname, "/public")))
 app.use(cookieParser("secretcode"))
-app.get("/", (req, res) => {
-    res.send("I am root!")
-})
+
+// app.get("/", (req, res) => {
+//     res.send("I am root!")
+// })
+
 app.use(session({
     secret: "BKL",
     resave: false,

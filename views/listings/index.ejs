@@ -1,24 +1,82 @@
 <%-layout("/layouts/boilerplate")%>
+
     <body>
-        <br><h2>All Listings</h2><br>
-        <!-- <form action="/listings/new" method="get"><button>Add new listing</button></form> -->
+        <style>
+            #filters{
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: 2rem;
+            }
+            .filter{
+                text-align: center  ;
+                margin-right: 4.25rem;
+                margin-top: 1rem;
+                opacity: 0.6;
+            }
+            .filter:hover{
+                opacity: 1;
+                cursor: pointer;
+            }
+        </style>
+        <div id="filters">
+            <div class="filter">
+                <div><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-bed"></i></div>
+                <p>Rooms</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-gamepad"></i></div>
+                <p>Games</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain-city"></i></div>
+                <p>Iconic Cities</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain"></i></div>
+                <p>Mountains</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-brands fa-fort-awesome"></i></div>
+                <p>Castles</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-person-swimming"></i></i></div>
+                <p>Pools</p>
+            </div><div class="filter">
+                <div><i class="fa-solid fa-tents"></i></div>
+                <p>Camping</p>
+            </div><div class="filter">
+                <div><i class="fa-solid fa-tractor"></i></div>
+                <p>Farms</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-snowman"></i></div>
+                <p>Snow</p>
+            </div>
+        </div>
         <ul>
-            <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+            <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
                 <%for(listing of allListings){%>
                     <a href="/listings/<%=listing._id%>" class="listing-link">
                         <div class="card" style="width: 23rem;">
                             <img src="<%=listing.image.url%>" class="card-img-top" style="height: 20rem;" alt="...">
                             <div class="card-body">
                                 <p class="card-text">
-                                    <b><%=listing.title%></b> <br>
+                                    <b>
+                                        <%=listing.title%>
+                                    </b> <br>
                                     <%=listing.description%> <br>
-                                    <b>₹<%=listing.price.toLocaleString("en-IN")%> /night</b>
+                                        <b>₹<%=listing.price.toLocaleString("en-IN")%> /night</b>
                                 </p>
                             </div>
                         </div>
                         <!-- <li><a href="/Listings/<%=listing._id%>"><%=listing.title%></a></li> -->
                     </a>
-                <%}%>
+                    <%}%>
             </div>
         </ul>
     </body>
