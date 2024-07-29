@@ -4,7 +4,8 @@ if (process.env.NODE_ENV != "production") {
 const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
-const mongoUrl = "mongodb://127.0.0.1:27017/airbnb"
+// const mongoUrl = "mongodb://127.0.0.1:27017/airbnb"
+const dbUrl = process.env.ATLASDB_URL
 const methodOverride = require("method-override")
 const path = require("path")
 const ejsMate = require("ejs-mate")
@@ -20,7 +21,7 @@ const LocalStrategy = require("passport-local")
 const User = require("./models/user.js")
 
 async function main() {
-    await mongoose.connect(mongoUrl)
+    await mongoose.connect(dbUrl)
 }
 main().then(() => {
     console.log("connected to DB")
