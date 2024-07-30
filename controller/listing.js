@@ -39,7 +39,7 @@ module.exports.showListing = async (req, res) => {
     }
     res.render("listings/show.ejs", { listing })
 }
-
+"streak"
 module.exports.renderEditListingForm = async (req, res) => {
     let { id } = req.params
     let listing = await Listing.findById(id)
