@@ -15,6 +15,7 @@ const reviewRouter = require("./routes/review.js")
 const userRouter = require("./routes/user.js")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
+const MongoStore = require("connect-mongo")
 const flash = require("connect-flash")
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
@@ -42,8 +43,20 @@ app.use(cookieParser("secretcode"))
 //     res.send("I am root!")
 // })
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET
+    },
+    touchAfter: 24 * 3600
+})
+store.on("error",()=>{
+    console.log("Error in MONGO SESSION STORE", err)
+})
+
 app.use(session({
-    secret: "BKL",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true
 }))
