@@ -53,7 +53,6 @@ const store = MongoStore.create({
 store.on("error",()=>{
     console.log("Error in MONGO SESSION STORE", err)
 })
-"bruh"
 app.use(session({
     store,
     secret: process.env.SECRET,
